@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../models/User');
-
+const _ = require('lodash');
 //middlewares
 const asynchMiddleware = require("../middlewares/asynch-middleware");
 const auth = require('../middlewares/auth');
+//Validators
+const loginValidation = require('../validation/login');
+const registerValidation = require('../validation/register');
+
 
 
 //@route   POST api/users/register
@@ -13,23 +17,22 @@ const auth = require('../middlewares/auth');
 //@required-date  name/email/password
 router.post("/register", asynchMiddleware(async (req, res) => {
     //1-input validation
-    // const { errors, isValid } = registerValidation(req.body);
+    const { errors, isValid } = registerValidation(_.pick(req.body, ['name', 'email', 'password', 'passwordConfirm']));
 
-    // if (!isValid) {
-    //     return res.status(400).json({
-    //         ...errors
-    //     });
-    // }
+    if (!isValid) return res.status(400).json({ success: false, ...errors, errorType: 'one' });
+
 
     //2-check email existance
-    //4-create user data
-    const userData = req.body;
+    const checkUser = User.findOne({ email: req.body.email });
+    if (checkUser) return res.status(400).json({ success: false, error: { email: "This email has been taken" }, errorType: 'one' });
 
-    //5-create a new User
+
+    //3-create a new User
+    const userData = _.pick(req.body, ['name', 'email', 'password', 'passwordConfirm']);
     const user = new User(userData);
-    console.log(user);
+    //console.log(user);
 
-    //6-save user in database
+    //4-save user in database
     try {
         await user.save();
     }
@@ -40,12 +43,13 @@ router.post("/register", asynchMiddleware(async (req, res) => {
         })
     }
 
-    //7-send response to the user
+    //5-send response to the user
     res.status(200).json({
         success: true,
         userData: {
             name: user.name,
             email: user.email,
+            id: user.id
         }
     })
 
@@ -59,7 +63,8 @@ router.post("/register", asynchMiddleware(async (req, res) => {
 //@required-date  email/password
 router.post('/login', asynchMiddleware(async (req, res) => {
     //1-input validation
-
+    const { isValid, errors } = loginValidation(_.pick(req.body, ['email', 'password']));
+    if (!isValid) return res.status(400).json({ loginSuccess: false, ...errors });
 
     const email = req.body.email;
     const password = req.body.password;
@@ -71,7 +76,8 @@ router.post('/login', asynchMiddleware(async (req, res) => {
             .status(400)
             .json({
                 loginSuccess: false,
-                error: 'Email OR Password is WRONG!'
+                error: 'Email OR Password is WRONG!',
+                errorType: 'all'
             });
     }
 
@@ -82,7 +88,8 @@ router.post('/login', asynchMiddleware(async (req, res) => {
             .status(400)
             .json({
                 loginSuccess: false,
-                error: 'Email OR Password is WRONG!'
+                error: 'Email OR Password is WRONG!',
+                errorType: 'all'
             });
     }
 
@@ -108,31 +115,16 @@ router.post('/login', asynchMiddleware(async (req, res) => {
 
 /**************************************************************************************************/
 
-//@route   GET api/users/logout
-//@desc    Log OUT User
-//@access  Private route
-//@required-date  none
-router.get('/logout', auth, asynchMiddleware(async (req, res) => {
+// router.get('/auth', auth, asynchMiddleware(async (req, res) => {
 
-}));
+//     userID = req.user.id
 
+//     const user = await User.findById(userID)
 
-
-
-router.get('/auth', auth, asynchMiddleware(async (req, res) => {
-
-    userID = req.user.id
-
-    const user = await User.findById(userID)
-
-    res.json({
-        ...user
-    })
-}));
-
-
-
-
+//     res.json({
+//         ...user
+//     })
+// }));
 
 
 

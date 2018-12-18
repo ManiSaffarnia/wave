@@ -1,4 +1,5 @@
 const isEmpty = require('./is_empty');
+const validator = require('validator');
 const _ = require('lodash');
 
 module.exports = (data) => {
