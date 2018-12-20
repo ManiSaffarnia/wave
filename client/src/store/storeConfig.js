@@ -1,6 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-
 //reducers
 import siteReducer from './reducers/site';
 import userReducer from './reducers/user';

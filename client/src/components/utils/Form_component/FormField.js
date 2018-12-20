@@ -16,6 +16,7 @@ const FormField = ({ formData, onChange, id }) => {
                             onChange={(event) => onChange({ event, id })}
                             id={id}
                         />
+                        {(!formData.valid && formData.validation) && (<div className="error_label">{formData.validationMessage}</div>)}
                     </div>
                 );
                 break;

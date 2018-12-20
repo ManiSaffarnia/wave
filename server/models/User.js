@@ -13,6 +13,13 @@ const userSchema = new Schema({
         minlength: 2,
         trim: true
     },
+    lastname: {
+        type: String,
+        required: true,
+        maxlength: 80,
+        minlength: 2,
+        trim: true
+    },
     email: {
         type: String,
         unique: true,
@@ -77,7 +84,7 @@ userSchema.methods.checkPassword = async function (enteredPassword) {
 
 //2-GENERATE TOKEN
 userSchema.methods.generateToken = function () {
-    return jwt.sign({ id: this.id, name: this.name }, process.env.JWT_SECRET, { expiresIn: "1d" }); //bad 1 rooz expire beshe
+    return jwt.sign({ id: this.id, name: this.name + ' ' + this.lastname }, process.env.JWT_SECRET, { expiresIn: "1d" }); //bad 1 rooz expire beshe
 };
 
 //user model

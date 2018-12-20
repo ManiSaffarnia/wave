@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../utils/Button';
 import Login from './Login';
-const RegisterLogin = () => {
+const RegisterLogin = (props) => {
     return (
         <div className="page_wrapper">
             <div className="container">

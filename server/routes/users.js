@@ -14,10 +14,10 @@ const registerValidation = require('../validation/register');
 //@route   POST api/users/register
 //@desc    Register a new User
 //@access  Public route
-//@required-date  name/email/password
+//@required-date  name/lastname/email/password
 router.post("/register", asynchMiddleware(async (req, res) => {
     //1-input validation
-    const { errors, isValid } = registerValidation(_.pick(req.body, ['name', 'email', 'password', 'passwordConfirm']));
+    const { errors, isValid } = registerValidation(_.pick(req.body, ['name', 'lastname', 'email', 'password', 'passwordConfirm']));
 
     if (!isValid) return res.status(400).json({ success: false, ...errors, errorType: 'one' });
 
@@ -28,7 +28,7 @@ router.post("/register", asynchMiddleware(async (req, res) => {
 
 
     //3-create a new User
-    const userData = _.pick(req.body, ['name', 'email', 'password', 'passwordConfirm']);
+    const userData = _.pick(req.body, ['name', 'lastname', 'email', 'password', 'passwordConfirm']);
     const user = new User(userData);
     //console.log(user);
 
@@ -48,6 +48,7 @@ router.post("/register", asynchMiddleware(async (req, res) => {
         success: true,
         userData: {
             name: user.name,
+            lastname: user.lastname,
             email: user.email,
             id: user.id
         }
@@ -107,6 +108,7 @@ router.post('/login', asynchMiddleware(async (req, res) => {
         userData: {
             id: user._id,
             name: user.name,
+            lastname: user.lastname,
             email: user.email
         }
     })
