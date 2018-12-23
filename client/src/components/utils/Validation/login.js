@@ -25,5 +25,15 @@ export const loginValidation = (element, formState = {}) => {
         };
     }
 
+    //confirm
+    if (element.validation.confirm && error.isValid) {
+        const isValid = element.value === formState[element.validation.confirm].value;
+        const message = isValid ? '' : `${element.config.name} is not match ${formState[element.validation.confirm].config.name}`;
+        error = {
+            isValid,
+            message
+        }
+    }
+
     return error
 }

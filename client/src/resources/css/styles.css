@@ -40,6 +40,12 @@ a {
     font-size: 30px;
 }
 
+.dialog_alert--center {
+    padding: 10px 20px 35px;
+    font-size: 28px;
+    text-align: center
+}
+
 .load_more_container {
     clear: both;
     margin-bottom: 50px;

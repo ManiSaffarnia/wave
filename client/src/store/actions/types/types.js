@@ -1,1 +1,9 @@
+//USER
 export const LOGIN_USER = "LOGIN_USER";
+export const REGISTER_USER = "REGISTER_USER";
+
+//LOADING
+
+
+//ERRORS
+export const SET_USER_ERROR = "SET_USER_ERROR";

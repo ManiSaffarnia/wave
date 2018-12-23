@@ -21,10 +21,9 @@ router.post("/register", asynchMiddleware(async (req, res) => {
 
     if (!isValid) return res.status(400).json({ success: false, ...errors, errorType: 'one' });
 
-
     //2-check email existance
-    const checkUser = User.findOne({ email: req.body.email });
-    if (checkUser) return res.status(400).json({ success: false, error: { email: "This email has been taken" }, errorType: 'one' });
+    const checkUser = await User.findOne({ email: req.body.email });
+    if (checkUser) return res.status(400).json({ success: false, error: "This email has been taken" });
 
 
     //3-create a new User

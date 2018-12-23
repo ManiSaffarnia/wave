@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import FormField from '../utils/Form_component/FormField';
 import { formAction, generateData, isFormValid } from '../utils/Form_actions/formAction';
-import { loginUser } from '../../store/actions/user';
+import { registerUser } from '../../store/actions/user';
+import Dialog from '@material-ui/core/Dialog';
 
 class Register extends Component {
 
     state = {
-        formSuccess: '',
+        formSuccess: false,
         formError: null,
         formErrorMessage: "Please check your inputs",
         formData: {
@@ -113,6 +114,19 @@ class Register extends Component {
         //Login Process
         else {
             console.log(data);
+            this.props.dispatch(registerUser(data)).then(response => {
+                if (response.success) {
+                    this.setState({ formSuccess: true });
+                    setTimeout(() => {
+                        this.props.history.push('/register_login')
+                    }, 5000);
+                } else {
+                    this.setState({
+                        formError: true,
+                        formErrorMessage: response.error
+                    })
+                }
+            });
         }
     };//end submit form
 
@@ -135,6 +149,7 @@ class Register extends Component {
                                             onChange={this.onChangeHandler}
                                         />
                                     </div>
+
                                     <div className="block">
                                         {/**LastName Feild */}
                                         <FormField
@@ -187,7 +202,19 @@ class Register extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+
+
+                {/**DIALOG */}
+                <Dialog open={this.state.formSuccess}>
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+                    <div className="dialog_alert--center">
+                        <div>Congratulations !!</div>
+                        <div>Please verify your Email, and then try to login.</div>
+                        <div>❤️</div>
+                    </div>
+                </Dialog>
+
+            </div>
         );
     }
 }

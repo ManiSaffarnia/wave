@@ -5,6 +5,7 @@ import configStore from './store/storeConfig';
 import App from './App';
 //css
 import './resources/css/styles.css'
+import './resources/css/checkmark.css'
 
 //create an store
 const store = configStore();
