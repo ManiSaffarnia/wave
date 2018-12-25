@@ -115,17 +115,30 @@ router.post('/login', asynchMiddleware(async (req, res) => {
 }));//END LOGIN
 
 /**************************************************************************************************/
+//@route   GET api/users/auth
+//@desc    check user authentication
+//@access  Public route
+router.get('/auth', auth, asynchMiddleware(async (req, res) => {
+    userID = req.user.id
 
-// router.get('/auth', auth, asynchMiddleware(async (req, res) => {
+    const user = await User.findById(userID)
+    if (!user) return res.status(400).json({ isAuth: false, error: true, errorMessage: "user not found" });
 
-//     userID = req.user.id
-
-//     const user = await User.findById(userID)
-
-//     res.json({
-//         ...user
-//     })
-// }));
+    res.json({
+        loginSuccess: true,
+        userData: {
+            id: user._id,
+            isAdmin: user.role === 0 ? false : true,
+            isAuth: true,
+            name: user.name,
+            lastname: user.lastname,
+            email: user.email,
+            role: user.role,
+            cart: user.cart,
+            history: user.history
+        }
+    })
+}));
 
 
 

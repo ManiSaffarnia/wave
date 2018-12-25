@@ -210,7 +210,7 @@ class Register extends Component {
                     <div className="dialog_alert--center">
                         <div>Congratulations !!</div>
                         <div>Please verify your Email, and then try to login.</div>
-                        <div>❤️</div>
+                        <div><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">❤️</span></div>
                     </div>
                 </Dialog>
 

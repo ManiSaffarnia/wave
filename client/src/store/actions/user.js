@@ -7,7 +7,6 @@ export const loginUser = (data = {}) => {
     return async (dispatch) => {
         //1- TODO: loading
 
-
         try {
             //2-axios
             const response = await axios.post(`${USERS_API}/login`, data);
@@ -29,12 +28,41 @@ export const loginUser = (data = {}) => {
     }
 };
 
-export const setLoginUser = (data = {}) => (
+export const setLoginUser = (data) => (
     {
         type: LOGIN_USER,
         data
     }
 );
+
+/**************************************/
+export const authUser = () => {
+    return async (dispatch) => {
+        //1- TODO: loading
+
+
+        try {
+            //2-axios
+            const response = await axios.get(`${USERS_API}/auth`);
+
+            //OK response
+            if (response.status === 200) {
+                // TODO: loading
+                console.log(response.data);
+                const resposnseData = { ...response.data }
+                dispatch(setLoginUser(resposnseData));
+                return response.data;
+            }
+        }//end try
+        catch (ex) {
+            //TODO: loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }//end catch
+    }
+};
 
 /**************************************/
 export const registerUser = (data) => {

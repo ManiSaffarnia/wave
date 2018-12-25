@@ -14,13 +14,13 @@ const userReducer = (state = userDefaultState, action) => {
         case LOGIN_USER:
             return {
                 ...state,
-                loginSuccess: action.data.loginSuccess,
-                userData: action.data.userData
+                loginSuccess: action.data.loginSuccess ? action.data.loginSuccess : '',
+                userData: action.data.userData ? action.data.userData : ''
             };
         case SET_USER_ERROR:
             return {
                 ...state,
-                loginSuccess: action.data.loginSuccess,
+                loginSuccess: action.data.loginSuccess ? action.data.loginSuccess : '',
                 error: action.data.error
             };
         case REGISTER_USER:

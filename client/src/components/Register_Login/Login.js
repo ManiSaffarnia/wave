@@ -58,13 +58,13 @@ class Login extends Component {
         //Login Process
         else {
             this.props.dispatch(loginUser(data)).then(response => {
-                if (response.loginSuccess) {
-                    this.props.history.push('/user/dashboard');
-                } else {
+                if (!response.loginSuccess) { //error
                     this.setState({
                         formError: true,
                         formErrorMessage: response.error
-                    })
+                    });
+                } else {
+                    this.props.history.push('/user/dashboard');
                 }
             });
         }
