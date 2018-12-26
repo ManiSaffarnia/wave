@@ -1,5 +1,5 @@
 //Types
-import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR } from '../actions/types/types';
+import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER } from '../actions/types/types';
 
 
 const userDefaultState = {
@@ -12,23 +12,13 @@ const userDefaultState = {
 const userReducer = (state = userDefaultState, action) => {
     switch (action.type) {
         case LOGIN_USER:
-            return {
-                ...state,
-                loginSuccess: action.data.loginSuccess ? action.data.loginSuccess : '',
-                userData: action.data.userData ? action.data.userData : ''
-            };
+            return { ...state, loginSuccess: action.data.loginSuccess ? action.data.loginSuccess : '', userData: action.data.userData ? action.data.userData : '' };
         case SET_USER_ERROR:
-            return {
-                ...state,
-                loginSuccess: action.data.loginSuccess ? action.data.loginSuccess : '',
-                error: action.data.error
-            };
+            return { ...state, loginSuccess: action.data.loginSuccess ? action.data.loginSuccess : '', error: action.data.error };
         case REGISTER_USER:
-            return {
-                ...state,
-                registerSuccess: action.data.success,
-                error: action.data.error
-            };
+            return { ...state, registerSuccess: action.data.success, error: action.data.error };
+        case LOGOUT_USER:
+            return { ...state, loginSuccess: '', userData: '' };
         default:
             return state;
     }

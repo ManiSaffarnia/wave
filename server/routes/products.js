@@ -80,9 +80,7 @@ router.get('/articles', asynchMiddleware(async (req, res) => {
     const products = await Product.find().populate('brand', ['name']).populate('wood', ['name']).sort([[sortBy, order]]).limit(limit);
     return res.json({
         success: true,
-        productData: {
-            ...products
-        }
+        products
     })
 
 }));//end

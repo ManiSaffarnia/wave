@@ -1,6 +1,6 @@
 import axios from 'axios';
 //Types
-import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR } from './types/types';
+import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER } from './types/types';
 import { USERS_API } from './urls/url';
 
 export const loginUser = (data = {}) => {
@@ -104,3 +104,8 @@ export const setUserError = (data) => (
         data
     }
 );
+
+/**************************************/
+export const logoutUser = () => ({
+    type: LOGOUT_USER
+})

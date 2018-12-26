@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { logoutUser } from '../../store/actions/user';
+import { deleteCookie } from '../../utils/cookie';
 
 class Header extends Component {
     state = {
@@ -40,9 +42,28 @@ class Header extends Component {
         ]
     };
 
+    logOutHandler = () => {
+        deleteCookie('x-auth-token');
+        this.props.dispatch(logoutUser());
+
+    };
+
     //element marboot be link haro misaze => chon momkene anvae mokhtalef link bashe
-    createLinkElement = (item, index) => {
-        return <Link to={item.linkTo} key={index}>{item.name}</Link>
+    createLinkElement = (item, index, type = null) => {
+        const user = this.props.user.userData;
+
+        if (item.name === 'My Cart') {
+            return (
+                <div className="cart_link" key={index}>
+                    <span>{user.cart ? user.cart.length : 0}</span>
+                    <Link to={item.linkTo}>{item.name}</Link>
+                </div>
+            )
+        }
+        else {
+            if (item.name === 'Log out') return (<div className="log_out_link" key={index} onClick={this.logOutHandler}>{item.name}</div>)
+            else return <Link to={item.linkTo} key={index}>{item.name}</Link>
+        }
     };
 
     //tasmim migire ke che link hai bayad namayesh dade beshe motanaseb ba vaziat authentication
@@ -50,7 +71,6 @@ class Header extends Component {
         let selectedLinkToDisplay = [];
         if (this.props.user.userData) {
             //check authentication
-
             if (!this.props.user.userData.isAuth) { //no login
                 selectedLinkToDisplay = linksList.filter((link) => {
                     return (link.public) ? link : null
@@ -62,10 +82,17 @@ class Header extends Component {
             }
         }
 
+        else {
+            selectedLinkToDisplay = linksList.filter((link) => {
+                return (link.public) ? link : null
+            })
+        }
+
         return selectedLinkToDisplay.map((item, index) => (
             this.createLinkElement(item, index)
-        ))
-    };
+        ));
+
+    };//end
 
     render() {
         return (

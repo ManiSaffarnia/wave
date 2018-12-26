@@ -12,7 +12,7 @@ export default () => {
         combineReducers({
             user: userReducer,
             site: siteReducer,
-            product: productReducer
+            products: productReducer
         }),
         composeEnhancer(applyMiddleware(thunk))
     );
