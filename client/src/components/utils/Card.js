@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import Button from './Button';
 
 class Card extends Component {
 
     renderCardImage = () => (
-        (this.props.images.length > 0) ? this.props.images[0].url : './images/image_not_availble.png'
+        (this.props.images.length > 0) ? this.props.images[0].url : './images/image-placeholder.jpg'
     )
 
     render() {
@@ -19,7 +20,23 @@ class Card extends Component {
                     </div>
                     {this.props.grid && <div className="description">{this.props.description}</div>}
 
-                    <div>{/**TODO:  BUTTONS*/}</div>
+                    <div className="actions">
+                        <div className="button_wrapp">
+                            <Button
+                                type="default"
+                                altClass="card_link"
+                                title="View product"
+                                linkTo={`/product_detail/${this.props.id}`}
+                                addStyles={{ margin: '10px 0 0 0' }}
+                            />
+                        </div>
+                        <div className="button_wrapp">
+                            <Button
+                                type="bag_link"
+                                runAction={() => { console.log('added to car') }}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );

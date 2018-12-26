@@ -1,9 +1,12 @@
 import axios from 'axios';
 //types
-import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL } from './types/types';
-import { PRODUCT_API } from './urls/url';
+import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_BRANDS, GET_WOODS } from './types/types';
+import { PRODUCT_API, BRAND_API, WOOD_API } from './urls/url';
 
 
+//////////////////////////////////////
+//////////      PRODUCTS
+//////////////////////////////////////
 
 export const getProductsByArrival = () => {
     return async (dispatch) => {
@@ -62,5 +65,69 @@ export const getProductsBySell = () => {
 
 export const setProductsBySell = (data) => ({
     type: GET_PRODUCTS_BY_SELL,
+    data
+});
+
+
+//////////////////////////////////////
+//////////      BRANDS
+//////////////////////////////////////
+
+export const getBrands = () => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`${BRAND_API}/all`);
+
+            //OK response
+            if (response.status === 200) {
+                // TODO: loading
+                dispatch(setBrands(response.data));
+                return response.data;
+            }
+        }//end try
+        catch (ex) {
+            //TODO: loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            //dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }//end catch
+    }
+};
+
+export const setBrands = (data) => ({
+    type: GET_BRANDS,
+    data
+});
+
+
+//////////////////////////////////////
+//////////      WOODS
+//////////////////////////////////////
+
+export const getWoods = () => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.get(`${WOOD_API}/all`);
+
+            //OK response
+            if (response.status === 200) {
+                // TODO: loading
+                dispatch(setWoods(response.data));
+                return response.data;
+            }
+        }//end try
+        catch (ex) {
+            //TODO: loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            //dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }//end catch
+    }
+};
+
+export const setWoods = (data) => ({
+    type: GET_WOODS,
     data
 });

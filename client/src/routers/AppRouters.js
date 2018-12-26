@@ -9,6 +9,7 @@ import Home from '../components/Home/Home';
 import RegisterLogin from '../components/Register_Login/index';
 import Register from '../components/Register_Login/Register';
 import Dashboard from '../components/User/Dashboard';
+import Shop from '../components/Shop/Shop';
 
 const AppRouter = () => (
     <BrowserRouter>
@@ -18,6 +19,7 @@ const AppRouter = () => (
                 <PublicRoute path="/register_login" component={RegisterLogin} />
                 <PublicRoute path="/register" component={Register} />
                 <PrivateRoute path="/user/dashboard" component={Dashboard} />
+                <Route path='/shop' component={Shop} />
 
             </Switch>
         </Layout>
