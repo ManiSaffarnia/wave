@@ -9,6 +9,7 @@ const asynchMiddleware = require("../middlewares/asynch-middleware");
 const auth = require('../middlewares/auth');
 const admin = require('../middlewares/admin');
 
+const getFilters = require('../helper/readFilter');
 
 //@route   POST api/products/addProduct
 //@desc    create a new product
@@ -82,6 +83,32 @@ router.get('/articles', asynchMiddleware(async (req, res) => {
         success: true,
         products
     })
+
+}));//end
+
+/*************************************************************************************************/
+
+//@route   POST api/products/shop
+//@desc    Fetch a certain amount of product 
+//@access  public route
+router.post('/shop', asynchMiddleware(async (req, res) => {
+    //1-TODO: input validation
+
+    const order = req.body.order || "desc";
+    const sortBy = req.body.sortBy || "_id";
+    const limit = parseInt(req.body.limit) || 100;
+    const skip = parseInt(req.body.skip);
+    const filters = getFilters(req.body.filters);
+
+    //Fetch from database
+    const products = await Product.find(filters).populate('brand', ['name']).populate('wood', ['name']).sort([[sortBy, order]]).skip(skip).limit(limit).exec();
+    return res.json({
+        success: true,
+        articles: products,
+        size: products.length
+    })
+
+    res.status(200);
 
 }));//end
 

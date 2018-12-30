@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getBrands, getWoods } from '../../store/actions/product';
+import { getBrands, getWoods, getProductsToShop } from '../../store/actions/product';
 import { frets } from '../utils/misc/frets';
 import { price } from '../utils/misc/price';
 
@@ -24,9 +24,14 @@ class Shop extends Component {
     };
 
     componentDidMount() {
-
         this.props.dispatch(getBrands());
         this.props.dispatch(getWoods());
+
+        this.props.dispatch(getProductsToShop({
+            skip: this.state.skip,
+            limit: this.state.limit,
+            filters: this.state.filters
+        }));
     }
 
     handlePrice = (priceID) => {
@@ -45,11 +50,19 @@ class Shop extends Component {
             newFilter[category] = priceValue;
         }
 
+        this.showFilteredResults(newFilter);
         this.setState({ filters: newFilter });
     };
 
+    showFilteredResults = (filters) => {
+        this.props.dispatch(getProductsToShop({
+            skip: 0,
+            limit: this.state.limit,
+            filters
+        }));
+    };
+
     render() {
-        console.log(this.state.filters);
         return (
             <div>
                 <PageTitle title="Browse Products" />

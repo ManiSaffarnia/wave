@@ -1,5 +1,5 @@
 //Types
-import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_BRANDS, GET_WOODS } from '../actions/types/types';
+import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_BRANDS, GET_WOODS, GET_PRODUCTS_TO_SHOP } from '../actions/types/types';
 
 
 const productDefaultState = {
@@ -15,6 +15,8 @@ const productReducer = (state = productDefaultState, action) => {
             return { ...state, brands: action.data.brands };
         case GET_WOODS:
             return { ...state, woods: action.data.woods };
+        case GET_PRODUCTS_TO_SHOP:
+            return { ...state, toShop: action.data.articles, toShopSize: action.data.size };
         default:
             return state;
     }
