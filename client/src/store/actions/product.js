@@ -85,8 +85,9 @@ export const getProductsToShop = ({ skip, limit, filters = [] }, previousState =
             //OK response
             if (response.status === 200) {
                 // TODO: loading
-                dispatch(setProductToShop(response.data));
-                return response.data;
+                let newState = [...previousState, ...response.data.articles]
+                dispatch(setProductToShop({ size: response.data.size, articles: newState }));
+                return { size: response.data.size, articles: newState };
             }
         }//end try
         catch (ex) {

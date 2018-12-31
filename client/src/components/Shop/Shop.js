@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import faBars from '@fortawesome/fontawesome-free-solid/faBars';
+import faTh from '@fortawesome/fontawesome-free-solid/faTh';
+
 import { getBrands, getWoods, getProductsToShop } from '../../store/actions/product';
 import { frets } from '../utils/misc/frets';
 import { price } from '../utils/misc/price';
@@ -8,6 +12,7 @@ import { price } from '../utils/misc/price';
 import PageTitle from '../utils/PageTitle';
 import CollapseCheckbox from '../utils/CollapseCheckbox';
 import CollapseRadio from '../utils/CollapseRadio';
+import LoadCard from './LoadCard';
 
 class Shop extends Component {
 
@@ -59,10 +64,37 @@ class Shop extends Component {
             skip: 0,
             limit: this.state.limit,
             filters
-        }));
+        })).then(() => {
+            this.setState({
+                skip: 0
+            })
+        });
+    };
+
+    loadMoreCardHandler = () => {
+        let currentSkip = this.state.skip + this.state.limit;
+        this.props.dispatch(getProductsToShop({
+            skip: currentSkip,
+            limit: this.state.limit,
+            filters: this.state.filters
+        },
+            this.props.products.toShop
+        )).then(() => {
+            this.setState({
+                skip: currentSkip
+            })
+        });
+
+    };
+
+    gridHandle = () => {
+        this.setState({
+            grid: !this.state.grid ? 'grid_bars' : ''
+        })
     };
 
     render() {
+        console.log(this.state.skip);
         return (
             <div>
                 <PageTitle title="Browse Products" />
@@ -109,7 +141,32 @@ class Shop extends Component {
 
                         </div>
                         <div className="right">
-                            Right
+                            <div className="shop_options">
+                                <div className="shop_grids clear">
+                                    <div
+                                        className={`grid_btn ${this.state.grid ? '' : 'active'}`}
+                                        onClick={this.gridHandle}
+                                    >
+                                        <FontAwesomeIcon icon={faTh} />
+                                    </div>
+
+                                    <div
+                                        className={`grid_btn ${this.state.grid ? 'active' : ''}`}
+                                        onClick={this.gridHandle}
+                                    >
+                                        <FontAwesomeIcon icon={faBars} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <LoadCard
+                                    grid={this.state.grid}
+                                    limit={this.state.limit}
+                                    size={this.props.products.toShopSize}
+                                    products={this.props.products.toShop}
+                                    loadMore={this.loadMoreCardHandler}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

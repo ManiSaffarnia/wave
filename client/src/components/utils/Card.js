@@ -16,7 +16,6 @@ class Card extends Component {
                         <div className="brand">{this.props.brand.name}</div>
                         <div className="name">{this.props.name}</div>
                         <div className="price">${this.props.price}</div>
-                        <div className="price">${this.props.price}</div>
                     </div>
                     {this.props.grid && <div className="description">{this.props.description}</div>}
 
