@@ -13,6 +13,9 @@ module.exports = (filtersObject) => {
         }
     }
 
+    //publish true
+    filters['publish'] = true;
+
     return filters
 };
 

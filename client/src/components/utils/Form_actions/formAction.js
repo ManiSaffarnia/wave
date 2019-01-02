@@ -56,3 +56,15 @@ export const isFormValid = (formData, formName) => {
 
     return error
 };
+
+/*********************************************************************************************** */
+//FORM OPTION GENERATOR
+export const populateOptionField = (formData, brands = [], target) => {
+    const newFormData = { ...formData };
+    const optionsArray = brands.map((brand) => {
+        return { key: brand._id, value: brand.name }
+    });
+
+    newFormData[target].config.options = optionsArray;
+    return newFormData;
+};

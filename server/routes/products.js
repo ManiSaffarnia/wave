@@ -89,7 +89,7 @@ router.get('/articles', asynchMiddleware(async (req, res) => {
 /*************************************************************************************************/
 
 //@route   POST api/products/shop
-//@desc    Fetch a certain amount of product 
+//@desc    Fetch products by filter 
 //@access  public route
 router.post('/shop', asynchMiddleware(async (req, res) => {
     //1-TODO: input validation
