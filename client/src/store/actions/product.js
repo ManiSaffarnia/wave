@@ -1,6 +1,6 @@
 import axios from 'axios';
 //types
-import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_BRANDS, GET_WOODS, GET_PRODUCTS_TO_SHOP } from './types/types';
+import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_BRANDS, GET_WOODS, GET_PRODUCTS_TO_SHOP, ADD_PRODUCT, CLEAR_PRODUCT } from './types/types';
 import { PRODUCT_API, BRAND_API, WOOD_API } from './urls/url';
 
 
@@ -68,6 +68,11 @@ export const setProductsBySell = (data) => ({
     data
 });
 
+
+export const clearAddedProduct = () => ({
+    type: CLEAR_PRODUCT
+});
+
 /********************** */
 /**SET PRODUCT TO SHOP */
 export const getProductsToShop = ({ skip, limit, filters = [] }, previousState = []) => {
@@ -104,6 +109,39 @@ export const setProductToShop = (data) => ({
     type: GET_PRODUCTS_TO_SHOP,
     data
 });
+
+
+/********************** */
+/**ADD PTODUCT */
+export const addProduct = (data) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post(`${PRODUCT_API}/addProduct`, data);
+
+            if (response.status === 200) {
+                // TODO: loading
+                dispatch(setProduct(response.data));
+                return;
+            }
+        }//end try
+        catch (ex) {
+            //TODO: loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            //dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }//end catch
+    }
+};
+
+
+export const setProduct = (data) => ({
+    type: ADD_PRODUCT,
+    data
+});
+
+
+
 
 //////////////////////////////////////
 //////////      BRANDS

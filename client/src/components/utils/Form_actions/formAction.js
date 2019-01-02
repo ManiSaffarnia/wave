@@ -68,3 +68,21 @@ export const populateOptionField = (formData, brands = [], target) => {
     newFormData[target].config.options = optionsArray;
     return newFormData;
 };
+
+/*********************************************************************************************** */
+//RESET FORM FIELD DATA
+export const resetFormField = (formData, formName) => {
+    const newFormData = { ...formData };
+
+    for (let key in newFormData) {
+        newFormData[key].value = "";
+        newFormData[key].valid = false;
+        newFormData[key].touched = false;
+        newFormData[key].validationMessage = '';
+    }
+
+    return newFormData;
+};
+
+
+

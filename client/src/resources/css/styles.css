@@ -900,6 +900,9 @@ footer .business_nfo .nfo {
     padding: 10px;
     box-sizing: border-box;
 }
+.dropzone_box:hover {
+    cursor: pointer;
+}
 
 .dropzone_box  .wrap {
     background: #eaeaea;

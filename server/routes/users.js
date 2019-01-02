@@ -2,9 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { User } = require('../models/User');
 const _ = require('lodash');
+const formidable = require('express-formidable');
+const cloudinary = require('cloudinary');
+
 //middlewares
 const asynchMiddleware = require("../middlewares/asynch-middleware");
 const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
 //Validators
 const loginValidation = require('../validation/login');
 const registerValidation = require('../validation/register');
@@ -140,6 +144,25 @@ router.get('/auth', auth, asynchMiddleware(async (req, res) => {
     })
 }));
 
+
+/**************************************************************************************************/
+//@route   POST api/users/uploadimage
+//@desc    Upload image
+//@access  private route
+router.post('/uploadimage', auth, admin, formidable(), asynchMiddleware(async (req, res) => {
+
+    cloudinary.uploader.upload(req.files.file.path, (result) => {
+        console.log(result);
+        res.status(200).send({
+            public_id: result.public_id,
+            url: result.url
+        });
+
+    }, {
+            public_id: `${Date.now()}`,
+            resource_type: 'auto'
+        })
+}));
 
 
 /**************************************************************************************************/

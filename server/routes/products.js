@@ -3,12 +3,11 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const { Product } = require('../models/Product');
 const _ = require('lodash');
-
-//middlewares
+//Middlewares
 const asynchMiddleware = require("../middlewares/asynch-middleware");
 const auth = require('../middlewares/auth');
 const admin = require('../middlewares/admin');
-
+//Helper
 const getFilters = require('../helper/readFilter');
 
 //@route   POST api/products/addProduct

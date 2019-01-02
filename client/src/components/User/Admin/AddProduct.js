@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getBrands, getWoods, getProductsToShop } from '../../../store/actions/product';
+import { getBrands, getWoods, addProduct, clearAddedProduct } from '../../../store/actions/product';
 
 import UserDashboardLayout from '../../hoc/UserDashboardLayout';
 import FormField from '../../utils/Form_component/FormField';
-import { formAction, generateData, isFormValid, populateOptionField } from '../../utils/Form_actions/formAction';
+import FileUpload from '../../utils/FileUpload';
+import { formAction, generateData, isFormValid, populateOptionField, resetFormField } from '../../utils/Form_actions/formAction';
 
 
 
@@ -13,6 +14,7 @@ class AddProduct extends Component {
     state = {
         formError: false,
         formSuccess: false,
+        formErrorMessage: 'Please check your inputs',
         formData: {
             name: {
                 element: "input",
@@ -176,6 +178,16 @@ class AddProduct extends Component {
                 touched: false,
                 validationMessage: "",
                 showLabel: true
+            },
+            images: {
+                value: [],
+                validation: {
+                    required: false
+                },
+                valid: true,
+                touched: false,
+                validationMessage: "",
+                showLabel: false
             }
 
         }
@@ -203,33 +215,47 @@ class AddProduct extends Component {
 
     }
 
-    onSubmitFormHandler = () => {
-        console.log('submited');
+    componentWillUnmount() {
+        this.props.dispatch(clearAddedProduct());
+    }
 
-        // e.preventDefault();
-        // const data = generateData(this.state.formData, 'register');
-        // const { isValid } = isFormValid(this.state.formData, 'register')
+    formResetHandler = () => {
+        const newFromData = resetFormField(this.state.formData, 'addProduct');
+        this.setState({
+            formSuccess: true,
+            formData: newFromData
+        });
 
-        // //Show error
-        // if (!isValid) this.setState({ formError: true });
+        //hide success message
+        setTimeout(() => {
+            this.setState({
+                formSuccess: false
+            })
+        }, 3000);
+    };
 
-        // //Login Process
-        // else {
-        //     console.log(data);
-        //     this.props.dispatch(registerUser(data)).then(response => {
-        //         if (response.success) {
-        //             this.setState({ formSuccess: true });
-        //             setTimeout(() => {
-        //                 this.props.history.push('/register_login')
-        //             }, 5000);
-        //         } else {
-        //             this.setState({
-        //                 formError: true,
-        //                 formErrorMessage: response.error
-        //             })
-        //         }
-        //     });
-        // }
+    onSubmitFormHandler = (e) => {
+        e.preventDefault();
+        const data = generateData(this.state.formData, 'addProduct');
+        const { isValid } = isFormValid(this.state.formData, 'addProduct')
+
+        //Show error
+        if (!isValid) this.setState({ formError: true });
+
+        //add product
+        else {
+            this.props.dispatch(addProduct(data)).then(response => {
+                if (this.props.products.addedProduct.success) {
+                    //reset the form
+                    this.formResetHandler();
+
+
+                }
+                else {
+                    this.setState({ formError: true });
+                }
+            })
+        }
     };
 
     onChangeHandler = (e) => {
@@ -241,6 +267,16 @@ class AddProduct extends Component {
         });
     };//end input change
 
+    imagesHandler = (images) => {
+        const newFormData = { ...this.state.formData };
+        newFormData['images'].value = images;
+        newFormData['images'].valid = true;
+
+        this.setState({
+            formData: newFormData
+        });
+    };
+
     render() {
         return (
             <UserDashboardLayout>
@@ -250,6 +286,11 @@ class AddProduct extends Component {
                     <form onSubmit={this.onSubmitFormHandler}>
 
                         {/**TODO: IMAGE UPLOADER */}
+
+                        <FileUpload
+                            imagesHandler={this.imagesHandler}
+                            reset={this.state.formSuccess}
+                        />
 
                         {/**Name */}
                         <FormField
@@ -327,7 +368,7 @@ class AddProduct extends Component {
                             {/**Error hai ke az samte server miad ya error haye koli */}
                             {this.state.formError && <div className="error_label">{this.state.formErrorMessage}</div>}
 
-                            <button onClick={this.onSubmitHandler}>Add Product</button>
+                            <button onClick={this.onSubmitFormHandler}>Add Product</button>
                         </div>
 
 
