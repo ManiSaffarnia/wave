@@ -189,7 +189,6 @@ class AddProduct extends Component {
                 validationMessage: "",
                 showLabel: false
             }
-
         }
     };
 

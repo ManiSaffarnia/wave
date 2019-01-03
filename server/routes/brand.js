@@ -20,7 +20,7 @@ router.post('/addBrand', auth, admin, asynchMiddleware(async (req, res) => {
     const brand = new Brand(_.pick(req.body, ['name']));
 
     //3-check for duplicate brand name
-    const duplicateBrand = Brand.findOne({ name: req.body.name });
+    const duplicateBrand = await Brand.findOne({ name: req.body.name });
     if (duplicateBrand) return res.status(400).json({ success: false, error: "this Brand has already exists" });
 
     //4-add to database

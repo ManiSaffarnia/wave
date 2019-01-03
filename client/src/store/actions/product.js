@@ -1,6 +1,6 @@
 import axios from 'axios';
 //types
-import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_BRANDS, GET_WOODS, GET_PRODUCTS_TO_SHOP, ADD_PRODUCT, CLEAR_PRODUCT } from './types/types';
+import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_BRANDS, GET_WOODS, GET_PRODUCTS_TO_SHOP, ADD_PRODUCT, CLEAR_PRODUCT, ADD_BRAND, ADD_WOOD } from './types/types';
 import { PRODUCT_API, BRAND_API, WOOD_API } from './urls/url';
 
 
@@ -171,6 +171,35 @@ export const getBrands = () => {
 
 export const setBrands = (data) => ({
     type: GET_BRANDS,
+    data
+});
+
+/********************** */
+/**ADD BRAND */
+export const addBrand = (data) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post(`${BRAND_API}/addBrand`, data);
+
+            //OK response
+            if (response.status === 200) {
+                // TODO: loading
+                dispatch(setBrand(response.data));
+                return response.data;
+            }
+        }//end try
+        catch (ex) {
+            //TODO: loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            //dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }//end catch
+    }
+};
+
+export const setBrand = (data) => ({
+    type: ADD_BRAND,
     data
 });
 

@@ -14,6 +14,7 @@ import Register from '../components/Register_Login/Register';
 import Dashboard from '../components/User/Dashboard';
 import Shop from '../components/Shop/Shop';
 import AddProduct from '../components/User/Admin/AddProduct';
+import ManageCategories from '../components/User/Admin/ManageCategories';
 
 const AppRouter = () => (
     <BrowserRouter>
@@ -29,6 +30,7 @@ const AppRouter = () => (
 
                 {/**Admin Route */}
                 <AdminRoute path="/admin/add_product" component={AddProduct} />
+                <AdminRoute path="/admin/manage_categories" component={ManageCategories} />
 
                 {/**404 */}
                 <Route component={ErrorPage} />
