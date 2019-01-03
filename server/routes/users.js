@@ -164,6 +164,19 @@ router.post('/uploadimage', auth, admin, formidable(), asynchMiddleware(async (r
         })
 }));
 
+/**************************************************************************************************/
+//@route   GET /api/users/removeimage?public_id=${id}
+//@desc    DELETE an Upload image
+//@access  private route
+router.get('/removeimage', auth, admin, asynchMiddleware(async (req, res) => {
+    const public_id = req.query.public_id;
+    cloudinary.uploader.destroy(public_id, (error, result) => {
+        if (error) return res.json({ success: false });
+
+        res.status(200).json({ success: true });
+    })
+}));
+
 
 /**************************************************************************************************/
 //export router

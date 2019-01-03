@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle';
+import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 class FileUpload extends Component {
@@ -35,20 +36,48 @@ class FileUpload extends Component {
     };
 
     onRemoveImageHandler = (id) => {
+        //TODO: show dialog box
 
+
+        axios.get(`/api/users/removeimage?public_id=${id}`).then(response => {
+            //TODO: check response from cloudinary
+
+            const newUploadedImagesArray = this.state.uploadedFiles.filter(item => {
+                return item.public_id !== id
+            });
+
+            this.setState({
+                uploadedFiles: newUploadedImagesArray
+            }, () => {
+                this.props.imagesHandler(newUploadedImagesArray);
+            })
+        });
     };
 
     showUploadedImages = () => (
         this.state.uploadedFiles.map(item => (
             <div className="dropzone_box" key={item.public_id} onClick={() => { this.onRemoveImageHandler(item.public_id) }}>
                 <div
-                    className="wrap"
+                    className="wrap upload_image"
                     style={{ background: `url(${item.url}) no-repeat` }}
                 >
+                    <div className="overlay">
+                        <FontAwesomeIcon icon={faTimes} className="remove_icon" />
+                    </div>
                 </div>
             </div>
         ))
     );
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.reset) {
+            return state = {
+                uploadedFiles: [],
+                uploading: false
+            }
+        }
+        return null;
+    }
 
     render() {
         return (

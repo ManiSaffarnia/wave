@@ -7,6 +7,7 @@ import App from './App';
 import './resources/css/styles.css';
 import './resources/css/checkmark.css';
 import './resources/css/spinner.css';
+import './resources/css/notFound.css';
 
 
 //create an store

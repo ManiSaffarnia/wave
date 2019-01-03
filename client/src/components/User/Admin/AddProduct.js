@@ -248,8 +248,6 @@ class AddProduct extends Component {
                 if (this.props.products.addedProduct.success) {
                     //reset the form
                     this.formResetHandler();
-
-
                 }
                 else {
                     this.setState({ formError: true });
