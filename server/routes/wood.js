@@ -20,7 +20,7 @@ router.post('/addWood', auth, admin, asynchMiddleware(async (req, res) => {
     const wood = new Wood(_.pick(req.body, ['name']));
 
     //3-check for duplicate wood name
-    const duplicateWood = Wood.findOne({ name: req.body.name });
+    const duplicateWood = await Wood.findOne({ name: req.body.name });
     if (duplicateWood) return res.status(400).json({ success: false, error: "this wood has already exists" });
 
     //4-add to database

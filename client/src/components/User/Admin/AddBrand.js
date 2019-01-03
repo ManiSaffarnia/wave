@@ -35,6 +35,10 @@ class AddBrand extends Component {
         this.props.dispatch(getBrands())
     }
 
+    componentWillUnmount() {
+        //TODO: clear addedBrand from store
+    }
+
     formResetHandler = () => {
         const newFromData = resetFormField(this.state.formData, 'addBrand');
         this.setState({

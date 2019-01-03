@@ -234,3 +234,32 @@ export const setWoods = (data) => ({
     type: GET_WOODS,
     data
 });
+
+/********************** */
+/**ADD WOOD */
+export const addWood = (data) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post(`${WOOD_API}/addWood`, data);
+
+            //OK response
+            if (response.status === 200) {
+                // TODO: loading
+                dispatch(setWood(response.data));
+                return response.data;
+            }
+        }//end try
+        catch (ex) {
+            //TODO: loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            //dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }//end catch
+    }
+};
+
+export const setWood = (data) => ({
+    type: ADD_WOOD,
+    data
+});
