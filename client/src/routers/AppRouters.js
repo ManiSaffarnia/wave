@@ -15,17 +15,22 @@ import Dashboard from '../components/User/Dashboard';
 import Shop from '../components/Shop/Shop';
 import AddProduct from '../components/User/Admin/AddProduct';
 import ManageCategories from '../components/User/Admin/ManageCategories';
+import Product from '../components/Product/Product';
 
 const AppRouter = () => (
     <BrowserRouter>
         <Layout>
             <Switch>
+                {/**General route */}
                 <Route path="/" component={Home} exact />
                 <Route path='/shop' component={Shop} />
+                <Route path='/product_detail/:id' component={Product} />
 
-                {/**Private route */}
+                {/**Public route */}
                 <PublicRoute path="/register_login" component={RegisterLogin} />
                 <PublicRoute path="/register" component={Register} />
+
+                {/**Private route */}
                 <PrivateRoute path="/user/dashboard" component={Dashboard} />
 
                 {/**Admin Route */}

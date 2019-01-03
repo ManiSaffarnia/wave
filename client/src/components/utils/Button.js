@@ -15,6 +15,9 @@ const Button = (props) => {
             case "bag_link":
                 jsxTemplate = <div className="bag_link" onClick={props.runAction}><FontAwesomeIcon icon={faShoppingBag} /></div>
                 break;
+            case "add_to_cart_link":
+                jsxTemplate = <div className="add_to_cart_link" onClick={props.runAction}><FontAwesomeIcon icon={faShoppingBag} />Add To Cart</div>
+                break;
             default:
                 jsxTemplate = '';
         }

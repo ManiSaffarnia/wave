@@ -25,7 +25,7 @@ class Card extends Component {
                                 type="default"
                                 altClass="card_link"
                                 title="View product"
-                                linkTo={`/product_detail/${this.props.id}`}
+                                linkTo={`/product_detail/${this.props._id}`}
                                 addStyles={{ margin: '10px 0 0 0' }}
                             />
                         </div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 //types
-import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_BRANDS, GET_WOODS, GET_PRODUCTS_TO_SHOP, ADD_PRODUCT, CLEAR_PRODUCT, ADD_BRAND, ADD_WOOD } from './types/types';
+import { GET_PRODUCTS_BY_SELL, GET_PRODUCTS_BY_ARRIVAL, GET_PRODUCT_DETAILS, CLEAR_PRODUCT_DETAILS, GET_BRANDS, GET_WOODS, GET_PRODUCTS_TO_SHOP, ADD_PRODUCT, CLEAR_PRODUCT, ADD_BRAND, ADD_WOOD } from './types/types';
 import { PRODUCT_API, BRAND_API, WOOD_API } from './urls/url';
 
 
@@ -141,7 +141,40 @@ export const setProduct = (data) => ({
 });
 
 
+/********************** */
+/**GET PRODUCT DETAILS */
+export const getProductDetail = (id) => {
+    return async (dispatch) => {
+        try {
+            //api/products/article_by_id?id=[ids]&type=[sigle,array]
+            const response = await axios.get(`${PRODUCT_API}/article_by_id?id=${id}&type=single`);
 
+            if (response.status === 200) {
+                // TODO: loading
+                dispatch(setProductDetail(response.data.productData[0]));
+                return;
+            }
+        }//end try
+        catch (ex) {
+            //TODO: loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            //dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }//end catch
+    }
+};
+
+
+export const setProductDetail = (data) => ({
+    type: GET_PRODUCT_DETAILS,
+    data
+});
+
+//clear
+export const clearProductDetail = () => ({
+    type: CLEAR_PRODUCT_DETAILS
+});
 
 //////////////////////////////////////
 //////////      BRANDS

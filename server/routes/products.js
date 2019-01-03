@@ -54,9 +54,9 @@ router.get('/article_by_id', asynchMiddleware(async (req, res) => {
     const products = await Product.find({ '_id': { $in: items } }).populate('brand', ['name']).populate('wood', ['name']).exec()
     return res.json({
         success: true,
-        productData: {
+        productData: [
             ...products
-        }
+        ]
     })
 
 }));//end
