@@ -2,6 +2,8 @@
 export const LOGIN_USER = "LOGIN_USER";
 export const REGISTER_USER = "REGISTER_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
+export const ADD_TO_CART = "ADD_TO_CART";
+
 
 //PRODUCT_TYPES
 export const GET_PRODUCTS_BY_SELL = "GET_PRODUCTS_BY_SELL";

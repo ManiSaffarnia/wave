@@ -152,13 +152,13 @@ export const getProductDetail = (id) => {
             if (response.status === 200) {
                 // TODO: loading
                 dispatch(setProductDetail(response.data.productData[0]));
-                return;
+                return response.data;
             }
         }//end try
         catch (ex) {
             //TODO: loading
             //TODO: set error from server
-            console.log(ex.response.data);
+            //console.log(ex.response.data);
             //dispatch(setUserError(ex.response.data));
             return ex.response.data
         }//end catch

@@ -48,10 +48,14 @@ router.get('/article_by_id', asynchMiddleware(async (req, res) => {
     if (type === "array") {
         const ids = items.split(',');
         items = [];
-        items = ids.map((id) => { return mongoose.Types.ObjectId(id) });
+        items = ids.map((id) => {
+            return mongoose.Types.ObjectId(id)
+        });
     }
 
-    const products = await Product.find({ '_id': { $in: items } }).populate('brand', ['name']).populate('wood', ['name']).exec()
+    const products = await Product.find({ '_id': { $in: items } }).populate('brand', ['name']).populate('wood', ['name']).exec();
+    if (products.length === 0) return res.json({ success: false })
+
     return res.json({
         success: true,
         productData: [

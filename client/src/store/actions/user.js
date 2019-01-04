@@ -1,6 +1,6 @@
 import axios from 'axios';
 //Types
-import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER } from './types/types';
+import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART } from './types/types';
 import { USERS_API } from './urls/url';
 
 export const loginUser = (data = {}) => {
@@ -109,3 +109,36 @@ export const setUserError = (data) => (
 export const logoutUser = () => ({
     type: LOGOUT_USER
 })
+
+/**************************************/
+export const addToCart = (productID) => {
+    return async (dispatch) => {
+        //1- TODO: show loading
+
+        try {
+            //2-send request with axios
+            const response = await axios.post(`${USERS_API}/addToCart?productID=${productID}`);
+
+            //OK response
+            if (response.status === 200) {
+                // TODO: loading
+                dispatch(setToCart(response.data.cart));
+                return response.data;
+            }
+        }
+        catch (ex) {
+            //TODO: hide loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }
+    }
+};
+
+export const setToCart = (data) => (
+    {
+        type: ADD_TO_CART,
+        data
+    }
+);

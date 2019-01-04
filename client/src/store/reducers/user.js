@@ -1,5 +1,5 @@
 //Types
-import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER } from '../actions/types/types';
+import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART } from '../actions/types/types';
 
 
 const userDefaultState = {
@@ -19,6 +19,8 @@ const userReducer = (state = userDefaultState, action) => {
             return { ...state, registerSuccess: action.data.success, error: action.data.error };
         case LOGOUT_USER:
             return { ...state, loginSuccess: '', userData: '' };
+        case ADD_TO_CART:
+            return { ...state, userData: { ...state.userData, cart: action.data } };
         default:
             return state;
     }

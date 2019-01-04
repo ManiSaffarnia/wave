@@ -94,7 +94,6 @@ class Shop extends Component {
     };
 
     render() {
-        console.log(this.state.skip);
         return (
             <div>
                 <PageTitle title="Browse Products" />

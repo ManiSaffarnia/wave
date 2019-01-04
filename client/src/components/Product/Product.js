@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { getProductDetail, clearProductDetail } from '../../store/actions/product';
+import { addToCart } from '../../store/actions/user';
 import PageTitle from '../utils/PageTitle';
 import Loading from '../utils/Loading';
 import ProductInfo from './ProductInfo';
@@ -11,7 +12,13 @@ class Product extends Component {
 
     componentDidMount() {
         const id = this.props.match.params.id;
-        this.props.dispatch(getProductDetail(id));
+        this.props.dispatch(getProductDetail(id)).then(response => {
+            if (!this.props.products.productDetail) {
+                //TODO: handle no response from server - send user back to home
+                console.log('no article found');
+                this.props.history.push('/shop');
+            }
+        });
     }
 
     componentWillUnmount() {
@@ -19,7 +26,7 @@ class Product extends Component {
     }
 
     addToCartHandler = (id) => {
-
+        this.props.dispatch(addToCart(id));
     }
 
     render() {

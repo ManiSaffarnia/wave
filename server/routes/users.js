@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const { User } = require('../models/User');
 const _ = require('lodash');
@@ -175,6 +176,60 @@ router.get('/removeimage', auth, admin, asynchMiddleware(async (req, res) => {
 
         res.status(200).json({ success: true });
     })
+}));
+
+/**************************************************************************************************/
+//@route   Post /api/users/addToCart
+//@desc    Add product to their cart
+//@access  private route
+router.post('/addToCart', auth, asynchMiddleware(async (req, res) => {
+    const userID = req.user.id;
+    const productID = req.query.productID;
+    let isDuplicate = false;
+
+    console.log(productID)
+
+    const user = await User.findById(userID)
+    if (!user) return res.status(400).json({ isAuth: false, error: true, errorMessage: "user not found" });
+
+    //check duplication
+    user.cart.forEach(product => {
+        if (product.id.toString() === productID) isDuplicate = true
+    });
+
+
+    if (isDuplicate) {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userID, "cart.id": mongoose.Types.ObjectId(productID) },
+            {
+                $inc: {
+                    "cart.$.quantity": 1
+                }
+            },
+            { new: true }
+        );
+
+        return res.json({ success: true, cart: updatedUser.cart });
+    }//end if 
+    else {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: userID },
+            {
+                $push: {
+                    cart: {
+                        id: mongoose.Types.ObjectId(productID),
+                        quantity: 1,
+                        date: Date.now()
+                    }
+                }
+            },
+            { new: true }
+        );
+
+        return res.json({ success: true, cart: updatedUser.cart });
+    }//end else
+
+
 }));
 
 
