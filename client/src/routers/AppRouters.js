@@ -16,6 +16,7 @@ import Shop from '../components/Shop/Shop';
 import AddProduct from '../components/User/Admin/AddProduct';
 import ManageCategories from '../components/User/Admin/ManageCategories';
 import Product from '../components/Product/Product';
+import Cart from '../components/User/Cart/Cart';
 
 const AppRouter = () => (
     <BrowserRouter>
@@ -32,6 +33,7 @@ const AppRouter = () => (
 
                 {/**Private route */}
                 <PrivateRoute path="/user/dashboard" component={Dashboard} />
+                <PrivateRoute path="/user/cart" component={Cart} />
 
                 {/**Admin Route */}
                 <AdminRoute path="/admin/add_product" component={AddProduct} />
