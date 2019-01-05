@@ -1,9 +1,13 @@
+const express = require('express');
 const bodyParser = require('body-parser');
 const cookiParser = require('cookie-parser');
 const cloudinary = require('cloudinary');
 require('dotenv').config();
 
 module.exports = app => {
+
+    //static file
+    app.use(express.static('client/build'));
 
     //body-parser
     app.use(bodyParser.urlencoded({ extended: false }));

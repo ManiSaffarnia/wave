@@ -1,4 +1,3 @@
-
 const usersRoute = require("../routes/users");
 const productRoute = require("../routes/products");
 const brandRoute = require("../routes/brand");
@@ -7,7 +6,6 @@ const paymentRoute = require("../routes/payment");
 
 module.exports = app => {
 
-    //static
 
     //dynamic
     app.use("/api/users", usersRoute); // User's routes
@@ -16,4 +14,11 @@ module.exports = app => {
     app.use("/api/woods", woodRoute); // Wood's routes
     app.use("/api/payment", paymentRoute); // Wood's routes
 
+    //static
+    if (process.env.NODE_ENV === 'production') {
+        const path = require('path');
+        app.get("*", (req, res) => {
+            res.sendfile(path.resolve(__dirname, '../client', 'build', 'index.html'));
+        });
+    }
 };
