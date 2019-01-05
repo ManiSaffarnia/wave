@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const { User } = require('../models/User');
+const { Product } = require('../models/Product');
 const _ = require('lodash');
 const formidable = require('express-formidable');
 const cloudinary = require('cloudinary');
@@ -187,8 +188,6 @@ router.post('/addToCart', auth, asynchMiddleware(async (req, res) => {
     const productID = req.query.productID;
     let isDuplicate = false;
 
-    console.log(productID)
-
     const user = await User.findById(userID)
     if (!user) return res.status(400).json({ isAuth: false, error: true, errorMessage: "user not found" });
 
@@ -230,6 +229,39 @@ router.post('/addToCart', auth, asynchMiddleware(async (req, res) => {
     }//end else
 
 
+}));
+
+/**************************************************************************************************/
+//@route   Get /api/users/removeFromCart
+//@desc    remove an item from cart
+//@access  private route
+router.get('/removeFromCart', auth, asynchMiddleware(async (req, res) => {
+    const userID = req.user.id;
+    const productID = req.query.id;
+
+    //check user existance
+    const user = await User.findById(userID)
+    if (!user) return res.status(400).json({ isAuth: false, error: true, errorMessage: "user not found" });
+
+    //update the cart inside database
+    const updatedUser = await User.findOneAndUpdate(
+        { _id: userID },
+        {
+            $pull: {
+                cart: {
+                    id: mongoose.Types.ObjectId(productID),
+                }
+            }
+        },
+        { new: true }
+    );
+
+
+    const newCartArray = updatedUser.cart.map(item => (mongoose.Types.ObjectId(item.id)));
+
+    const productsDetail = await Product.find({ '_id': { $in: newCartArray } }).populate('brand').populate('wood').exec();
+
+    return res.json({ success: true, cart: updatedUser.cart, cartDetail: productsDetail });
 }));
 
 

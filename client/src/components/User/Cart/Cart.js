@@ -5,8 +5,9 @@ import faFrown from '@fortawesome/fontawesome-free-solid/faFrown';
 //import faSmile from '@fortawesome/fontawesome-free-solid/faSmile';
 
 import UserDashboardLayout from '../../hoc/UserDashboardLayout';
-import { getProductInCart } from '../../../store/actions/user';
+import { getProductInCart, removeItemFromCart } from '../../../store/actions/user';
 import ProductCartBlock from '../../utils/ProductCartBlock';
+import Checkout from '../../utils/Checkout';
 
 class Cart extends Component {
 
@@ -48,7 +49,28 @@ class Cart extends Component {
     };
 
     handleRemoveFromCart = (id) => {
+        this.props.dispatch(removeItemFromCart(id)).then(response => {
+            if (this.props.user.cartDetail.length === 0) {
+                this.setState({
+                    showTotal: false
+                })
+            }
+            else {
+                this.calculateTotalPrice(this.props.user.cartDetail);
+            }
+        });
+    };
 
+    transactionError = (data) => {
+        console.log(data);
+    };
+
+    transactionCanceled = (data) => {
+        console.log(data);
+    };
+
+    transactionSuccess = (data) => {
+        console.log(data);
     };
 
     render() {
@@ -81,6 +103,16 @@ class Cart extends Component {
                         }
 
                     </div>
+                    {this.state.showTotal &&
+                        <div className="zarinpal_button_container">
+                            <Checkout
+                                toPay={this.state.total}
+                                transactionError={(data) => this.transactionError(data)}
+                                transactionCanceled={(data) => this.transactionCanceled(data)}
+                                onSuccess={(data) => this.transactionSuccess(data)}
+                            />
+                        </div>
+                    }
                 </div>
             </UserDashboardLayout>
         );

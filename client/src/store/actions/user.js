@@ -1,6 +1,6 @@
 import axios from 'axios';
 //Types
-import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART, GET_PRODUCT_IN_CART } from './types/types';
+import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART, GET_PRODUCT_IN_CART, REMOVE_USER_CART_ITEM } from './types/types';
 import { USERS_API, PRODUCT_API } from './urls/url';
 
 export const loginUser = (data = {}) => {
@@ -185,6 +185,52 @@ export const getProductInCart = (cartItems, userCart) => {
 export const setProductInCart = (data) => (
     {
         type: GET_PRODUCT_IN_CART,
+        data
+    }
+);
+
+/**************************************/
+
+export const removeItemFromCart = (id) => {
+    return async (dispatch) => {
+        //1- TODO: show loading
+        try {
+            //2-send request with axios
+            //api/products/article_by_id?id=[ids]&type=[sigle,array]
+            const response = await axios.get(`${USERS_API}/removeFromCart?id=${id}`);
+
+
+            //OK response
+            if (response.status === 200) {
+                // TODO: loading
+
+                //add quantity ro the response
+                //add quantity ro the response
+                response.data.cart.forEach(item => {
+                    response.data.cartDetail.forEach((k, i) => {
+                        if (k._id === item.id) {
+                            response.data.cartDetail[i].quantity = item.quantity
+                        }
+                    })
+                });
+
+                dispatch(removeProductInCart(response.data));
+                return { success: true, data: response.data.productData };
+            }
+        }
+        catch (ex) {
+            //TODO: hide loading
+            //TODO: set error from server
+            console.log(ex.response.data);
+            dispatch(setUserError(ex.response.data));
+            return ex.response.data
+        }
+    }
+};
+
+export const removeProductInCart = (data) => (
+    {
+        type: REMOVE_USER_CART_ITEM,
         data
     }
 );

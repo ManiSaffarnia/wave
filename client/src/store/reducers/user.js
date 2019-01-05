@@ -1,5 +1,5 @@
 //Types
-import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART, GET_PRODUCT_IN_CART } from '../actions/types/types';
+import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART, GET_PRODUCT_IN_CART, REMOVE_USER_CART_ITEM } from '../actions/types/types';
 
 
 const userDefaultState = {
@@ -23,6 +23,8 @@ const userReducer = (state = userDefaultState, action) => {
             return { ...state, userData: { ...state.userData, cart: action.data } };
         case GET_PRODUCT_IN_CART:
             return { ...state, cartDetail: action.data };
+        case REMOVE_USER_CART_ITEM:
+            return { ...state, cartDetail: action.data.cartDetail, userData: { ...state.userData, cart: action.data.cart } };
         default:
             return state;
     }
