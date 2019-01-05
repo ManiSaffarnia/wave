@@ -1,16 +1,21 @@
 //Types
-import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART, GET_PRODUCT_IN_CART, REMOVE_USER_CART_ITEM } from '../actions/types/types';
+import { LOADING, UNSET_LOADING, LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART, GET_PRODUCT_IN_CART, REMOVE_USER_CART_ITEM } from '../actions/types/types';
 
 
 const userDefaultState = {
     loginSuccess: '',
     registerSuccess: '',
     userData: '',
-    error: ''
+    error: '',
+    loading: false
 };
 
 const userReducer = (state = userDefaultState, action) => {
     switch (action.type) {
+        case LOADING:
+            return { ...state, loading: true };
+        case UNSET_LOADING:
+            return { ...state, loading: false };
         case LOGIN_USER:
             return { ...state, loginSuccess: action.data.loginSuccess ? action.data.loginSuccess : '', userData: action.data.userData ? action.data.userData : '' };
         case SET_USER_ERROR:

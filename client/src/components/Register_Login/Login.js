@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import FormField from '../utils/Form_component/FormField';
 import { formAction, generateData, isFormValid } from '../utils/Form_actions/formAction';
 import { loginUser } from '../../store/actions/user';
+import LightLoading from '../utils/LightLoading';
+
 
 class Login extends Component {
 
@@ -106,16 +108,22 @@ class Login extends Component {
                     <button onClick={this.onSubmitHandler}>Log in</button>
 
                 </form>
+
+
+
+                {/**Loading */}
+                {this.props.user.loading && <LightLoading />}
+
+
             </div>
         );
     }
 }
-// const mapStateToProps = (storeState) => ({
 
-// });
+const mapStateToProps = (state) => ({
+    user: state.user
+});
 
-// const mapDispatchToProps = (dispatch) => ({
-//     loginUser: (data) => { dispatch(loginUser(data)) }
-// });
 
-export default connect()(withRouter(Login));
+
+export default connect(mapStateToProps)(withRouter(Login));

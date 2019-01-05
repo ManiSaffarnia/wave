@@ -1,11 +1,12 @@
 import axios from 'axios';
 //Types
-import { LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART, GET_PRODUCT_IN_CART, REMOVE_USER_CART_ITEM } from './types/types';
+import { LOADING, UNSET_LOADING, LOGIN_USER, REGISTER_USER, SET_USER_ERROR, LOGOUT_USER, ADD_TO_CART, GET_PRODUCT_IN_CART, REMOVE_USER_CART_ITEM } from './types/types';
 import { USERS_API, PRODUCT_API } from './urls/url';
 
 export const loginUser = (data = {}) => {
     return async (dispatch) => {
         //1- TODO: loading
+        dispatch(setLoading());
 
         try {
             //2-axios
@@ -15,11 +16,13 @@ export const loginUser = (data = {}) => {
             if (response.status === 200) {
                 // TODO: loading
                 dispatch(setLoginUser(response.data));
+                dispatch(unsetLoading());
                 return response.data;
             }
         }//end try
         catch (ex) {
             //TODO: loading
+            dispatch(unsetLoading());
             //TODO: set error from server
             console.log(ex.response.data);
             dispatch(setUserError(ex.response.data));
@@ -68,6 +71,7 @@ export const authUser = () => {
 export const registerUser = (data) => {
     return async (dispatch) => {
         //1- TODO: show loading
+        dispatch(setLoading());
 
         try {
             //2-send request with axios
@@ -77,11 +81,13 @@ export const registerUser = (data) => {
             if (response.status === 200) {
                 // TODO: loading
                 dispatch(setRegisterUser(response.data));
+                dispatch(unsetLoading());
                 return response.data;
             }
         }
         catch (ex) {
             //TODO: hide loading
+            dispatch(unsetLoading());
             //TODO: set error from server
             console.log(ex.response.data);
             dispatch(setUserError(ex.response.data));
@@ -232,5 +238,18 @@ export const removeProductInCart = (data) => (
     {
         type: REMOVE_USER_CART_ITEM,
         data
+    }
+);
+
+/**************************************/
+export const setLoading = () => (
+    {
+        type: LOADING
+    }
+);
+
+export const unsetLoading = () => (
+    {
+        type: UNSET_LOADING
     }
 );

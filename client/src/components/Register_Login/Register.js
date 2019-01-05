@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import FormField from '../utils/Form_component/FormField';
 import { formAction, generateData, isFormValid } from '../utils/Form_actions/formAction';
 import { registerUser } from '../../store/actions/user';
 import Dialog from '@material-ui/core/Dialog';
+import LightLoading from '../utils/LightLoading';
 
 class Register extends Component {
 
@@ -130,6 +132,11 @@ class Register extends Component {
         }
     };//end submit form
 
+    handleClose = (e) => {
+        this.setState({
+            formSuccess: false
+        })
+    };
 
     render() {
         return (
@@ -205,7 +212,7 @@ class Register extends Component {
 
 
                 {/**DIALOG */}
-                <Dialog open={this.state.formSuccess}>
+                <Dialog open={this.state.formSuccess} onClose={this.handleClose}>
                     <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
                     <div className="dialog_alert--center">
                         <div>Congratulations !!</div>
@@ -214,9 +221,17 @@ class Register extends Component {
                     </div>
                 </Dialog>
 
+
+
+                {/**Loading */}
+                {this.props.user.loading && <LightLoading />}
             </div>
         );
     }
 }
 
-export default connect()(Register);
+const mapStateToProps = (state) => ({
+    user: state.user
+})
+
+export default connect(mapStateToProps)(withRouter(Register));

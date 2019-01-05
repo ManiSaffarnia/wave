@@ -8,6 +8,7 @@ import './resources/css/styles.css';
 import './resources/css/checkmark.css';
 import './resources/css/spinner.css';
 import './resources/css/notFound.css';
+import './resources/css/loading.css';
 
 
 //create an store
