@@ -4,7 +4,7 @@ require('dotenv').config();
 
 module.exports = () => {
     //database uri
-    const databaseURI = (process.env.NODE_ENV === 'production') ? config.get("databaseURI") : `${process.env.DATABASE_URI}`;
+    const databaseURI = process.env.DATABASE_URI;
 
     //PRODUCTION ENVIRONMENT
     if (process.env.NODE_ENV === 'production') {
