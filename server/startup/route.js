@@ -20,9 +20,9 @@ module.exports = app => {
         const path = require('path');
         const rootPath = path.dirname(process.mainModule.filename);
         console.log(rootPath);
-        app.use(express.static(path.resolve(rootPath, 'client', 'build')));
+        app.use(express.static(path.resolve(rootPath, '../client', 'build')));
         app.get("*", (req, res) => {
-            res.sendFile(path.resolve(rootPath, 'client', 'build', 'index.html'));
+            res.sendFile(path.resolve(rootPath, '../client', 'build', 'index.html'));
         });
     }
 };
