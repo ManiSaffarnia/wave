@@ -6,9 +6,6 @@ require('dotenv').config();
 
 module.exports = app => {
 
-    //static file
-    app.use(express.static('client/build'));
-
     //body-parser
     app.use(bodyParser.urlencoded({ extended: false }));
 
