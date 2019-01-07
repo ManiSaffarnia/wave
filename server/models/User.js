@@ -45,6 +45,10 @@ const userSchema = new Schema({
         type: String,
         default: null
     },
+    isActive: {
+        type: Boolean,
+        default: false
+    },
     role: {
         type: Number,
         default: 0

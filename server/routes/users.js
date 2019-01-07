@@ -1,11 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 const { User } = require('../models/User');
 const { Product } = require('../models/Product');
 const _ = require('lodash');
 const formidable = require('express-formidable');
 const cloudinary = require('cloudinary');
+
+//email
+const sendVerificationEMail = require('../Mail/verificationMail');
 
 //middlewares
 const asynchMiddleware = require("../middlewares/asynch-middleware");
@@ -33,9 +37,11 @@ router.post("/register", asynchMiddleware(async (req, res) => {
 
 
     //3-create a new User
+    const id = mongoose.Types.ObjectId();
     const userData = _.pick(req.body, ['name', 'lastname', 'email', 'password', 'passwordConfirm']);
+    userData._id = id;
+    userData.token = await jwt.sign({ user: { id } }, process.env.JWT_SECRET);
     const user = new User(userData);
-    //console.log(user);
 
     //4-save user in database
     try {
@@ -47,6 +53,10 @@ router.post("/register", asynchMiddleware(async (req, res) => {
             error: err
         })
     }
+
+    //send verification email
+    const url = (process.env.NODE_ENV === 'production') ? `https://mani-waves.herokuapp.com/api/users/verification/${userData.token}` : `http://localhost:4000/api/users/verification/${userData.token}`;
+    await sendVerificationEMail(user.email, url);
 
     //5-send response to the user
     res.status(200).json({
@@ -60,6 +70,8 @@ router.post("/register", asynchMiddleware(async (req, res) => {
     })
 
 }));//END REGISTER
+
+
 
 /**************************************************************************************************/
 
@@ -99,15 +111,20 @@ router.post('/login', asynchMiddleware(async (req, res) => {
             });
     }
 
-    /*
-    *TODO - check for email verification
-    */
+    //4-check user activition
+    if (!user.isActive) {
+        return res
+            .json({
+                loginSuccess: false,
+                error: 'Your email is not verified. please check your email.',
+                errorType: 'all'
+            });
+    }
 
-
-    //4-generate token
+    //5-generate token
     const token = user.generateToken();
 
-    //5-set generated token inside cookie, and send response - mitoonam local storage ham estefade konam mesle poroje devyabam
+    //6-set generated token inside cookie, and send response - mitoonam local storage ham estefade konam mesle poroje devyabam
     res.cookie('x-auth-token', token).status(200).json({
         loginSuccess: true,
         userData: {
@@ -264,6 +281,37 @@ router.get('/removeFromCart', auth, asynchMiddleware(async (req, res) => {
     return res.json({ success: true, cart: updatedUser.cart, cartDetail: productsDetail });
 }));
 
+/**************************************************************************************************/
+//@route   GET api/users/verification/:token
+//@desc    verify user email address
+//@access  Private
+router.get('/verification/:token', asynchMiddleware(async (req, res) => {
+    //take token from req.params
+    const { token } = req.params;
+    if (!token) return res.status(400).send('There is no token');
+
+    try {
+        //decode token
+        const decodeUser = jwt.verify(token, process.env.JWT_SECRET);
+
+        //find user by this id
+        const user = await User.findById(decodeUser.user.id);
+
+        if (user.token === token) {
+            //delete token from db and active user
+            const updatedUser = await User.findByIdAndUpdate(user.id, { $set: { token: null, isActive: true } }, { new: true });
+
+            //redirect
+            res.redirect((process.env.NODE_ENV === 'production') ? 'https://mani-waves.herokuapp.com/register_login' : 'http://localhost:3000/register_login');
+        }
+        else {
+            return res.status(400).send('Tokens are not match');
+        }
+    }
+    catch (err) {
+        res.status(400).send('token not verified');
+    }
+}));//END
 
 /**************************************************************************************************/
 //export router

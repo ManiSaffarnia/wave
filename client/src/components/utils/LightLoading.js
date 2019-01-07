@@ -11,6 +11,7 @@ const LightLoading = () => {
                         <div className="sk-cube4 sk-cube"></div>
                         <div className="sk-cube3 sk-cube"></div>
                     </div>
+                    Loading...
                 </div>
             </div>
         </div>
