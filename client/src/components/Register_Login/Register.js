@@ -111,7 +111,7 @@ class Register extends Component {
         const { isValid } = isFormValid(this.state.formData, 'register')
 
         //Show error
-        if (!isValid) this.setState({ formError: true });
+        if (!isValid) this.setState({ formError: true, formErrorMessage: 'Please check your inputs' });
 
         //Login Process
         else {

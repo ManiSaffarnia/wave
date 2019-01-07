@@ -50,6 +50,7 @@ export const isFormValid = (formData, formName) => {
         message: ''
     };
 
+
     for (let key in formData) {
         error.isValid = formData[key].valid && error.isValid;
     }
