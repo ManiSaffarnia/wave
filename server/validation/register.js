@@ -5,13 +5,15 @@ const _ = require('lodash');
 module.exports = (data) => {
     /*Register data:
         name - string, required, min=2, max:40
+        lastname - string, required, min=2, max:40
         email - string, required, max=255
         password - string, required, min=8, max=20
     */
     const errors = {};
-    let { name, email, password, passwordConfirm } = _.pick(data, ['name', 'email', 'password', 'passwordConfirm']);
+    let { name, lastname, email, password, passwordConfirm } = _.pick(data, ['name', 'lastname', 'email', 'password', 'passwordConfirm']);
 
     name = !isEmpty(name) ? name : '';
+    lastname = !isEmpty(lastname) ? lastname : '';
     email = !isEmpty(email) ? email : '';
     password = !isEmpty(password) ? password : '';
     passwordConfirm = !isEmpty(passwordConfirm) ? passwordConfirm : '';
@@ -27,6 +29,19 @@ module.exports = (data) => {
         } else {
             if (!validator.isLength(name, { min: 2, max: 40 }))
                 errors.name = 'name should be between 2-40 charachters';
+        }
+    }
+
+    /*LASTNAME*/
+    if (isEmpty(lastname)) errors.lastname = 'Lastname field is required';
+    else {
+        const nameRex = /^[\u0600-\u06FF\u0750-\u077Fa-zA-Z ]*$/;
+
+        if (!nameRex.test(lastname)) {
+            errors.lastname = 'name can not contain numbers';
+        } else {
+            if (!validator.isLength(lastname, { min: 2, max: 40 }))
+                errors.lastname = 'lastname should be between 2-40 charachters';
         }
     }
 

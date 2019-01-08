@@ -29,7 +29,7 @@ router.post("/register", asynchMiddleware(async (req, res) => {
     //1-input validation
     const { errors, isValid } = registerValidation(_.pick(req.body, ['name', 'lastname', 'email', 'password', 'passwordConfirm']));
 
-    if (!isValid) return res.status(400).json({ success: false, ...errors, errorType: 'one' });
+    if (!isValid) return res.status(400).json({ success: false, error: { ...errors }, errorType: 'validation' });
 
     //2-check email existance
     const checkUser = await User.findOne({ email: req.body.email });

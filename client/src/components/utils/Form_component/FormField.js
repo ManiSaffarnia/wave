@@ -21,7 +21,8 @@ const FormField = ({ formData, onChange, id }) => {
                             onChange={(event) => onChange({ event, id })}
                             id={id}
                         />
-                        {(!formData.valid && formData.validation) && (<div className="error_label">{formData.validationMessage}</div>)}
+                        {formData.description && <small className="input_desc"> {formData.description}</small>}
+                        {(!formData.valid && formData.validation) ? (<div className="error_label">{formData.validationMessage}</div>) : <small className="input_desc"> {formData.description}</small>}
                     </div>
                 );
                 break;

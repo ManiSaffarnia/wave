@@ -73,7 +73,8 @@ class Register extends Component {
                 },
                 valid: false,
                 touched: false,
-                validationMessage: ""
+                validationMessage: "",
+                description: "password must be at least 8 characters"
             },
             passwordConfirm: {
                 element: "input",
@@ -113,9 +114,8 @@ class Register extends Component {
         //Show error
         if (!isValid) this.setState({ formError: true, formErrorMessage: 'Please check your inputs' });
 
-        //Login Process
+        //register Process
         else {
-            console.log(data);
             this.props.dispatch(registerUser(data)).then(response => {
                 if (response.success) {
                     this.setState({ formSuccess: true });
@@ -123,10 +123,22 @@ class Register extends Component {
                         this.props.history.push('/register_login')
                     }, 5000);
                 } else {
-                    this.setState({
-                        formError: true,
-                        formErrorMessage: response.error
-                    })
+                    if (response.errorType && response.errorType === "validation") {
+                        const newData = { ...this.state.formData }
+                        for (let key in response.error) {
+                            newData[key].valid = false;
+                            newData[key].validationMessage = response.error[key];
+                        }
+                        this.setState({
+                            formData: newData
+                        })
+                    }
+                    else {
+                        this.setState({
+                            formError: true,
+                            formErrorMessage: response.error
+                        })
+                    }
                 }
             });
         }

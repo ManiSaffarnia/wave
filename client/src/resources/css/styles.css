@@ -772,6 +772,11 @@ footer .business_nfo .nfo {
     width: 90%;
 }
 
+.input_desc{
+    display: block;
+    color: #686868;
+}
+
 /*=============================
          USER
 ===============================*/
